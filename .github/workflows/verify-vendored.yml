@@ -1,20 +1,27 @@
 name: verify-vendored
 
 # REQUIRED check: the vendored skills must match skills.lock.json exactly.
-# Scaffold — the verify step is added with tools/verify-lock.mjs.
+#
+# Runs on every pull request with no path filter. A required check that is
+# skipped never reports, and the pull request would wait on it forever.
 
 on:
   pull_request:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
-  verify:
+  verify-vendored:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: The lock check catches tampering
+        run: node --test tools/verify-lock.test.mjs
       - name: Vendored files match the lock
-        run: echo "TODO — node tools/verify-lock.mjs"
+        run: node tools/verify-lock.mjs

@@ -1,0 +1,4 @@
+# Vendored skills are stored and checked out byte for byte. Without this, git on
+# Windows may rewrite line endings, and every fingerprint in skills.lock.json
+# would stop matching.
+.claude/skills/** -text

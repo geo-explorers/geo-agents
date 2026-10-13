@@ -3,15 +3,14 @@
   "permissions": {
     "allow": [
       "Bash(node tools/*)",
-      "Bash(node --env-file=.env tools/*)",
+      "Bash(node --test tools/*)",
       "Bash(node agents/*/scripts/*)",
       "Bash(node --env-file=.env agents/*/scripts/*)",
-      "Bash(node .claude/skills/*/scripts/*)",
-      "Bash(node --env-file=.env .claude/skills/*/scripts/*)",
       "Bash(npm ci)",
       "Bash(npm ci *)"
     ],
     "ask": [
+      "Bash(node tools/sync-skills.mjs*)",
       "Bash(* --publish *)",
       "Bash(* --publish)"
     ],
