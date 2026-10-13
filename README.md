@@ -2,7 +2,7 @@
 
 All Geo agents, one folder each. The skills they use are **vendored** from the [content-management](https://github.com/geo-explorers/content-management) skills library at one pinned release. This repository never edits them.
 
-> **Migration status.** The tools and the lock check are in place. The skills are vendored in step 4 and the agents move in during step 5. Until then `.claude/skills/` is empty and the folders under `agents/` are placeholders.
+> **Migration status.** The tools, the lock check and the vendored skills are in place: 15 skills from content-management `v1.0.0`. The agents move in during step 5; until then the folders under `agents/` are placeholders.
 
 Agents read [`CLAUDE.md`](CLAUDE.md) first: it holds the hard rules and the routing.
 
@@ -25,6 +25,34 @@ Secrets go in a `.env` file that you create and fill in yourself. It is git-igno
 > Filled in when the agents move here in step 5.
 
 Every session starts with `node tools/verify-lock.mjs`. If it fails, the agent stops and asks a maintainer.
+
+## What runs from here
+
+All 15 library skills are vendored, so their instructions are always at hand. Not all of them can *run* from this repository yet. Some call shared code that lives only in the library (`src/`, `lib/`, root `scripts/`), or expect the library's folder layout. Those are run from a checkout of [content-management](https://github.com/geo-explorers/content-management) until the library ships its shared code as a package.
+
+| Skill | Runs from here? | Why |
+|---|---|---|
+| geo-query | Yes | Plain GraphQL over HTTP. Its client is here as `shared/geo-read.mjs` |
+| geo-mirror, Geo → Notion | Yes | The mirroring scripts need nothing outside the skill folder |
+| geo-mirror, Notion → Geo | No | `sync-to-geo.mjs` imports the library's `src/functions.ts` and the Geo SDK |
+| ontology-advisor | Yes | Its scripts use only what is in the skill folder |
+| geo-describe | Yes | Its similarity check needs the Python package `sentence_transformers` |
+| geo-discovery | Partly | The read stages are self-contained. The publish and dashboard scripts need the Geo SDK |
+| notion-operations | Yes | It is guidance. The helper it names, `scripts/notion-read.mjs`, lives in the library |
+| daily-report | Yes | Self-contained |
+| image-banner-recompose | Yes | Self-contained |
+| geo-publish | No | Its publish scripts import `src/functions`, `lib/inject.ts` and `src/xlsx-to-csv.cjs` |
+| geo-clean | No | Uses `src/` and `validate_migration.ts` |
+| geo-orchestrate | No | Generates scripts that import `src/` |
+| geo-claim-grouping | No | `discover_candidates.ts` imports `src/functions.ts` |
+| geo-claim-grouping-notion | No | Its own scripts are self-contained, but the discovery step it starts with is geo-claim-grouping's |
+| geo-mirror-and-group | No | `run-pipeline.mjs` builds paths in the library's `skills/<tier>/` layout |
+| geo-press-review | No | Runs `scripts/press-review-coverage-map.ts` from the library root |
+
+Two more things to know when a skill is run from here:
+
+- **Paths in the instructions are the library's.** A skill may say `skills/actionable/geo-mirror/scripts/…`. Here the same file is at `.claude/skills/geo-mirror/scripts/…`. The vendored files are never edited to fix this.
+- **This table was built by reading imports and paths, not by running each skill.** The two agents that move here in step 5 are each proven with a supervised run.
 
 ## Update the skills
 
@@ -51,8 +79,9 @@ Never edit a file under `.claude/skills/` and never edit `skills.lock.json` by h
 |---|---|
 | `node tools/verify-lock.mjs` | Every vendored file matches its fingerprint, and nothing extra is in `.claude/skills/` |
 | `node --test tools/verify-lock.test.mjs` | The check itself catches a changed, added or removed file |
+| `node --test shared/notion.test.mjs` | The Notion client paces requests, retries reads, and never retries a write |
 
-Both run in GitHub on every pull request as the `verify-vendored` check, which is required to merge.
+All three run in GitHub on every pull request as the `verify-vendored` check, which is required to merge.
 
 ## Layout
 
@@ -63,7 +92,7 @@ Both run in GitHub on every pull request as the `verify-vendored` check, which i
 | `.claude/agents/<role>.md` | One subagent definition per role |
 | `.claude/settings.json` | Allowlist: run the tools and agent scripts, ask before any `--publish` or skills sync, never read `.env*` |
 | `agents/<name>/` | One folder per agent |
-| `shared/` | One Notion client and one read-only Geo client, until the library has its own shared package |
+| `shared/` | `notion.mjs`, the one Notion client, and `geo-read.mjs`, a read-only Geo client copied from the library. Both go away when the library has its own shared package |
 | `docs/` | The library's `documentation/`, moved here. geo-research reads it |
 | `workflow/` | Task and QA-issue lifecycle guide, and `ids.json` |
 | `skills.lock.json` | Library tag, commit, and a fingerprint per vendored file |
