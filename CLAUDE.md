@@ -2,7 +2,7 @@
 
 Hard rules and routing for every agent in this repository. They live here, with the agents, so they load wherever an agent runs.
 
-> **Migration status.** This repository is being built in steps. The tools, the lock check and these rules are in place. The skills are vendored in step 4 and the agents move in during step 5. Until then, `.claude/skills/` is empty and the folders under `agents/` are placeholders. This note is removed when step 5 lands.
+> **Migration status.** This repository is being built in steps. The tools, the lock check, these rules and the vendored skills are in place. The agents move in during step 5; until then the folders under `agents/` are placeholders. This note is removed when step 5 lands.
 
 ## First, every session
 
@@ -42,6 +42,8 @@ Decide which skill applies before doing anything, then use it. Do not hand-write
 | write claim-grouping results into a Notion Claims mirror as review columns | **geo-claim-grouping-notion** |
 
 If a request is ambiguous, ask which skill. Do not guess.
+
+**Not every skill can run from this repository yet.** Skills that publish to Geo or call the library's shared code still run from a checkout of the skills library: geo-publish, geo-clean, geo-orchestrate, geo-claim-grouping, geo-claim-grouping-notion, geo-mirror-and-group, geo-press-review, and the write-back half of geo-mirror. If a task needs one of them, say so and stop; do not copy the missing code here or rewrite the skill's steps by hand. The full table is in [`README.md`](README.md).
 
 ### Agents
 

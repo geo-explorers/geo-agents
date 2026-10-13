@@ -23,5 +23,7 @@ jobs:
           node-version: '22'
       - name: The lock check catches tampering
         run: node --test tools/verify-lock.test.mjs
+      - name: The shared Notion client behaves
+        run: node --test shared/notion.test.mjs
       - name: Vendored files match the lock
         run: node tools/verify-lock.mjs
