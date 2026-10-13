@@ -1,0 +1,20 @@
+name: verify-vendored
+
+# REQUIRED check: the vendored skills must match skills.lock.json exactly.
+# Scaffold — the verify step is added with tools/verify-lock.mjs.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Vendored files match the lock
+        run: echo "TODO — node tools/verify-lock.mjs"

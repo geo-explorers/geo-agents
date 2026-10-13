@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "permissions": {
+    "allow": [
+      "Bash(node tools/*)",
+      "Bash(node --env-file=.env tools/*)",
+      "Bash(node agents/*/scripts/*)",
+      "Bash(node --env-file=.env agents/*/scripts/*)",
+      "Bash(node .claude/skills/*/scripts/*)",
+      "Bash(node --env-file=.env .claude/skills/*/scripts/*)",
+      "Bash(npm ci)",
+      "Bash(npm ci *)"
+    ],
+    "ask": [
+      "Bash(* --publish *)",
+      "Bash(* --publish)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Bash(cat .env*)",
+      "Bash(tail .env*)",
+      "Bash(grep * .env*)"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "_comment": "Space ids, tracker ids, model per role, thresholds. Ids never in prose.",
+  "spaces": {},
+  "trackers": {},
+  "models": {},
+  "thresholds": {}
+}
