@@ -2,8 +2,6 @@
 
 Hard rules and routing for every agent in this repository. They live here, with the agents, so they load wherever an agent runs.
 
-> **Migration status.** This repository is being built in steps. The tools, the lock check, these rules and the vendored skills are in place. The agents move in during step 5; until then the folders under `agents/` are placeholders. This note is removed when step 5 lands.
-
 ## First, every session
 
 Run the lock check before doing anything else:
@@ -47,13 +45,20 @@ If a request is ambiguous, ask which skill. Do not guess.
 
 ### Agents
 
-Each agent owns one folder under `agents/`. Read its `AGENT.md` first.
+Each agent owns one folder under `agents/`, with its full instructions in `AGENT.md`. Claude Code loads the agent from `.claude/agents/<name>.md`, which points there.
 
-| Agent | Folder | Status |
+| Agent | Folder | What it does |
 |---|---|---|
-| geo-research | `agents/geo-research/` | Moves here in step 5 |
-| geo-mirror-refresh | `agents/geo-mirror-refresh/` | Moves here in step 5 |
-| QA agent | `agents/qa-agent/` | Built here in step 7 |
+| geo-research | `agents/geo-research/` | Researches a question under the trusted-sources allowlist and returns a cited draft. Read-only |
+| geo-mirror-refresh | `agents/geo-mirror-refresh/` | Refreshes the Geo → Notion mirrors and reports what changed. Reads Geo, writes Notion |
+| QA agent | `agents/qa-agent/` | Not built yet |
+
+### The Agents flow teamspace
+
+Before any work in the **Agents flow** Notion teamspace, read [`workflow/AGENT-WORKFLOW.md`](workflow/AGENT-WORKFLOW.md). Every Notion id it needs is in [`workflow/ids.json`](workflow/ids.json). Two rules from it that are easy to get wrong:
+
+- **Log the task BEFORE starting work**, in the Work tracker, with `Projects` set to **Agent flows** — every view filters on it, so a task without it is invisible to the team.
+- **Problems go in the QA issue tracker**, with severity, urgency and evidence — never buried in a task note.
 
 ## Where things live
 

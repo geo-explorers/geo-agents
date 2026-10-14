@@ -2,7 +2,7 @@
 
 All Geo agents, one folder each. The skills they use are **vendored** from the [content-management](https://github.com/geo-explorers/content-management) skills library at one pinned release. This repository never edits them.
 
-> **Migration status.** The tools, the lock check and the vendored skills are in place: 15 skills from content-management `v1.0.0`. The agents move in during step 5; until then the folders under `agents/` are placeholders.
+> **Status.** 15 skills vendored from content-management `v1.0.0`. Two agents live here: geo-research and geo-mirror-refresh. The QA agent is not built yet.
 
 Agents read [`CLAUDE.md`](CLAUDE.md) first: it holds the hard rules and the routing.
 
@@ -18,13 +18,20 @@ node tools/verify-lock.mjs
 
 The last command must print `OK`. Start Claude Code from this folder so the rules, the skills and the allowlist all load.
 
-Secrets go in a `.env` file that you create and fill in yourself. It is git-ignored, and agents are not allowed to read it.
+Secrets go in a `.env` file that you create and fill in yourself, starting from `.env.example`. It is git-ignored, and agents are not allowed to read it. It needs only `NOTION_TOKEN`; no agent here needs a wallet key.
 
 ## Run an agent
 
-> Filled in when the agents move here in step 5.
+1. **Start Claude Code in this folder.** Agents are loaded when a session starts, so start a new session after pulling changes.
+2. **Ask for the job in plain words**, for example "refresh the mirrors" or "research this entity", or name the agent: "use the geo-research agent to …".
+3. The agent reads its instructions in `agents/<name>/AGENT.md`, checks the vendored skills with `node tools/verify-lock.mjs`, and stops if that check fails.
 
-Every session starts with `node tools/verify-lock.mjs`. If it fails, the agent stops and asks a maintainer.
+| Agent | Needs |
+|---|---|
+| geo-mirror-refresh | `NOTION_TOKEN` in `.env`, and the mirror pages connected to that Notion integration |
+| geo-research | Web search, and the Hypergraph MCP server registered in Claude Code under the name `hypergraph-mcp`. Its tool list uses that name; under another name the agent loses its Geo lookups |
+
+Both agents log their task in the Work tracker first, as [`workflow/AGENT-WORKFLOW.md`](workflow/AGENT-WORKFLOW.md) requires.
 
 ## What runs from here
 
