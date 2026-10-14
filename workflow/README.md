@@ -2,8 +2,5 @@
 
 The task and QA-issue lifecycle every agent follows, and the ids it needs.
 
-> Scaffold.
-
-- `ids.json` — space ids, tracker ids and page ids. **Ids live here, never in prose.**
-- Lifecycle guide: TODO — log the task first, claim it, record the result, raise QA issues
-  with severity, urgency, evidence and a named owner.
+- [`AGENT-WORKFLOW.md`](AGENT-WORKFLOW.md) — the operating contract for the Agents flow Notion teamspace: where to work, the mandatory task lifecycle, the Work tracker and QA issue tracker fields, the hard rules and the known traps. Moved here from the skills library.
+- [`ids.json`](ids.json) — every Notion page, database and Geo space id the agents use. **Ids live here, never in prose.** Documents name an id by its key, for example `notion.workTracker.dataSource`.

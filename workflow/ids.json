@@ -1,5 +1,50 @@
 {
-  "_comment": "Space ids, tracker ids and page ids. Ids belong here, never in prose.",
-  "spaces": {},
-  "notion": {}
+  "_comment": "Notion page, database and Geo space ids used by the agents. Ids live here, never in prose: documents name them by key, for example notion.workTracker.dataSource.",
+  "notion": {
+    "agentsFlowCenter": "3da273e214eb80599115cdca4c631888",
+    "geoContentWork": "3d6273e214eb80dfbf64e9b33ad15f2b",
+    "projectTracking": "3db273e214eb818c90ebe4d42baace74",
+    "workTracker": {
+      "dataSource": "collection://21bdbf37-b876-4ab5-8608-7fa7e42bd8a3",
+      "view": "3db273e214eb81f089c4e6886556cc43"
+    },
+    "qaIssueTracker": {
+      "dataSource": "collection://d9398afb-b542-4c9a-931a-b279f1acd2b2",
+      "view": "3db273e214eb8179af37f51779419a92"
+    },
+    "agentFlowsProject": "3db273e214eb8118b9ded7e6cfdda7ea",
+    "mirrorIndex": "3dc273e214eb8001b78ae2fe1d46bc84"
+  },
+  "mirrors": {
+    "ai": {
+      "title": "AI - new",
+      "notionPage": "3db273e214eb801a8bc0d3c2c6b43657",
+      "geoSpaceName": "AI",
+      "geoSpace": "41e851610e13a19441c4d980f2f2ce6b"
+    },
+    "worldAffairs": {
+      "title": "World affairs - new",
+      "notionPage": "3db273e214eb80d1b10fff9bea162e88",
+      "geoSpaceName": "World affairs",
+      "geoSpace": "89bd89bf28ff8a0963faf92a8c905e20"
+    },
+    "relationships": {
+      "title": "Relationships - new",
+      "notionPage": "3db273e214eb807eaf40f0d0b75d95b6",
+      "geoSpaceName": "Relationships",
+      "geoSpace": "224406e0de3c48d78ef12774111b8b2f"
+    },
+    "usPolitics": {
+      "title": "US Politics - new",
+      "notionPage": "3db273e214eb80a69ce8c3c3e4b16285",
+      "geoSpaceName": "US Politics",
+      "geoSpace": "4582fbbee28a16589154f7e36f1ee3c5"
+    },
+    "sources": {
+      "title": "Sources - new",
+      "notionPage": "3db273e214eb808caa91fd674145d546",
+      "geoSpaceName": "all four spaces",
+      "geoSpace": null
+    }
+  }
 }
