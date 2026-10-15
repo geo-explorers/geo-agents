@@ -1,10 +1,10 @@
 {
   "library": {
     "repo": "geo-explorers/content-management",
-    "tag": "v1.0.0",
-    "commit": "a7166025cd81bc3078a217588de78f786a22c7d2"
+    "tag": "v1.1.0",
+    "commit": "c95c19280adfd8d8dcfb62e9bd58e7c63becebb7"
   },
-  "vendoredAt": "2026-10-13",
+  "vendoredAt": "2026-10-15",
   "skills": {
     "daily-report": {
       "tier": "non-actionable",

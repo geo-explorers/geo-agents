@@ -2,7 +2,7 @@
 
 All Geo agents, one folder each. The skills they use are **vendored** from the [content-management](https://github.com/geo-explorers/content-management) skills library at one pinned release. This repository never edits them.
 
-> **Status.** 15 skills vendored from content-management `v1.0.0`. Two agents live here: geo-research and geo-mirror-refresh. The QA agent is not built yet.
+> **Status.** 15 skills vendored from content-management `v1.1.0`. Two agents live here: geo-research and geo-mirror-refresh. The QA agent is not built yet.
 
 Agents read [`CLAUDE.md`](CLAUDE.md) first: it holds the hard rules and the routing.
 
