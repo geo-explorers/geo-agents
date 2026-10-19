@@ -1,8 +1,8 @@
 {
   "library": {
     "repo": "geo-explorers/geo-skills",
-    "tag": "v1.2.0",
-    "commit": "2ec00815a5773bd68532d86d3a28257189d14feb"
+    "tag": "v1.2.1",
+    "commit": "39eedbef4f5e678a742e84baae87ad768959e1ed"
   },
   "vendoredAt": "2026-10-19",
   "skills": {
@@ -56,7 +56,7 @@
     },
     "image-banner-recompose": {
       "tier": "non-actionable",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     "notion-operations": {
       "tier": "non-actionable",
@@ -138,7 +138,7 @@
     ".claude/skills/image-banner-recompose/references/api_endpoints.md": "f85ce174f5c005a43d3cc70b907549b1cb44007494082729583bf173e6b17304",
     ".claude/skills/image-banner-recompose/references/qa_check.md": "8bb425c74915f9a6ca17e48258aea7e5cf87a32ccba09e4349ae32be0c68450f",
     ".claude/skills/image-banner-recompose/references/strategies.md": "40e6ed8cbe829e1681cca66e77ed6415cdb7529175057fa1bea1ecc063ab6311",
-    ".claude/skills/image-banner-recompose/SKILL.md": "dd47b0f68b23c1894f5f6c4aadf71ea6cae2cabd78b53dac94117c8cf5e03e7b",
+    ".claude/skills/image-banner-recompose/SKILL.md": "18e24785e6057b38e716136ff88267115a8640f392cff039803cf930e2a12c2a",
     ".claude/skills/notion-operations/evals/evals.json": "3a2239fd5c5d79431bfca9521b87113c6826185796434ae6f7d2b35bc7dc0b91",
     ".claude/skills/notion-operations/references/api-versions-and-limits.md": "36ec6d70eab12dc428d1a60337d949025ce8f251c554e95a839c6344b83b03d6",
     ".claude/skills/notion-operations/references/notion-traps.md": "819d3fb67c7899694ee25aa00dcb6c585a7716f6808784ebea6255d927f8b617",
