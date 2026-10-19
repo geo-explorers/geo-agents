@@ -1,10 +1,10 @@
 {
   "library": {
-    "repo": "geo-explorers/content-management",
-    "tag": "v1.1.0",
-    "commit": "c95c19280adfd8d8dcfb62e9bd58e7c63becebb7"
+    "repo": "geo-explorers/geo-skills",
+    "tag": "v1.2.0",
+    "commit": "2ec00815a5773bd68532d86d3a28257189d14feb"
   },
-  "vendoredAt": "2026-10-15",
+  "vendoredAt": "2026-10-19",
   "skills": {
     "daily-report": {
       "tier": "non-actionable",
@@ -12,7 +12,7 @@
     },
     "geo-claim-grouping": {
       "tier": "actionable",
-      "version": "0.7.0"
+      "version": "0.7.1"
     },
     "geo-claim-grouping-notion": {
       "tier": "non-actionable",
@@ -20,7 +20,7 @@
     },
     "geo-clean": {
       "tier": "actionable",
-      "version": "0.5.0"
+      "version": "0.5.1"
     },
     "geo-describe": {
       "tier": "non-actionable",
@@ -36,11 +36,11 @@
     },
     "geo-mirror-and-group": {
       "tier": "non-actionable",
-      "version": "1.0.0"
+      "version": "1.0.1"
     },
     "geo-orchestrate": {
       "tier": "actionable",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     "geo-press-review": {
       "tier": "non-actionable",
@@ -48,11 +48,11 @@
     },
     "geo-publish": {
       "tier": "actionable",
-      "version": "0.11.0"
+      "version": "0.12.1"
     },
     "geo-query": {
       "tier": "non-actionable",
-      "version": "0.2.9"
+      "version": "0.2.11"
     },
     "image-banner-recompose": {
       "tier": "non-actionable",
@@ -83,11 +83,11 @@
     ".claude/skills/geo-claim-grouping/references/ops-script-template.md": "b82a84c63fd80704bd1cc38a467be365415a2fdb9c165aecdac5803b88dcab10",
     ".claude/skills/geo-claim-grouping/references/queries-and-signals.md": "452bf871eb216ca947a2099459dcc17187f6538e36ff438675fa666bb98ba919",
     ".claude/skills/geo-claim-grouping/scripts/discover_candidates.ts": "6f140a3c68cda44d443c0b2b808391c32299df7f8619d6fd1260c514586709b2",
-    ".claude/skills/geo-claim-grouping/SKILL.md": "523b9bca3f434be7f063168b7b55715d5a25297aa0aba2888b2fac425ab267bb",
+    ".claude/skills/geo-claim-grouping/SKILL.md": "506910dc68c6fe9b4fd4d87644c5f581c6df31df97c9354d1fee96a3d93b53f5",
     ".claude/skills/geo-clean/big-merge.md": "69fe3405ac33dc9ff82c4794bf643fc8a4eeac97227e265f44c3233ecb60fa4d",
     ".claude/skills/geo-clean/evals/evals.json": "ae899b9bea68a6fe9ca19da697d1d5af42075d4a1273c82a8c6c96f0f4cc02f1",
-    ".claude/skills/geo-clean/reference.md": "a772a4477efd02c5f322cbf7f5d94b24f6039d537271112ee26ebe2117192ec1",
-    ".claude/skills/geo-clean/SKILL.md": "95bc041dc79319db620a6916422dcabbedbedd21d6301219af0e6e8de1e63079",
+    ".claude/skills/geo-clean/reference.md": "c07e5d64e57ac66fbccd9033977a275f01dd71ad5caa4410f922d4620ff2dc78",
+    ".claude/skills/geo-clean/SKILL.md": "b2dbe0b5d04533663a1d8967954df6ac87d12dc73090eb2955af1914cc93f558",
     ".claude/skills/geo-describe/evals/evals.json": "24bc288ef9d17cb27da8b06de3c0bf3960d7d4c7c8467559da388f2df27d221b",
     ".claude/skills/geo-describe/references/accuracy-verification.md": "e55a6a3e9ffce975fa59887b9cd18795066280fe7cfa7f10a563d195a1b318f2",
     ".claude/skills/geo-describe/references/closeness-and-accuracy-checks.md": "6c91afa9dd42ef31da0d436319a1912cb14c4b2428fcf32b1e7a0e85891413b3",
@@ -113,7 +113,7 @@
     ".claude/skills/geo-discovery/SKILL.md": "6d4ed042baf2d28961966339d0caba4844d5701964da1129474fc81fec7f5f8f",
     ".claude/skills/geo-mirror-and-group/evals/evals.json": "56a23d67437a120d8667b1b0fe26d3e050ebe3040e21f2beb624545c2d9938c7",
     ".claude/skills/geo-mirror-and-group/scripts/run-pipeline.mjs": "2dffa20babf9f0ceb4d6070c33cd04c6d92d7bd75ceabf504e23636244c9ebd8",
-    ".claude/skills/geo-mirror-and-group/SKILL.md": "5d927998c075ea2f5b05796c07c41d0f4d9fec2c0470d290567289ce0629e62b",
+    ".claude/skills/geo-mirror-and-group/SKILL.md": "7346589e391a44401f843600bb2b010791daf37fc3a6d6bbee47080d176277dd",
     ".claude/skills/geo-mirror/evals/evals.json": "1c00079fe8532702acbe8d842ddc52501bfcd06f9bf67525bdc6c473d126d431",
     ".claude/skills/geo-mirror/scripts/bulk-set-property.mjs": "cbb9d3ec71b1b89f77d77e748032e93fdcfca50f1f567d1701001e3ab189c840",
     ".claude/skills/geo-mirror/scripts/diff-notion-vs-geo.mjs": "7ef96a6ca6d07fe31bf8260b5f88aed6beec2b7095c7710fb924d3f76d5e9f14",
@@ -127,13 +127,13 @@
     ".claude/skills/geo-mirror/scripts/sync-to-geo.mjs": "82d52c64be1813d292a47e233341f11d7e91d4fbd6c2046e8b5707e9886d652b",
     ".claude/skills/geo-mirror/SKILL.md": "f88458da2091ae0340da4391e14485951d14833dbd40a6e0d58e184d453006d0",
     ".claude/skills/geo-orchestrate/evals/evals.json": "0c175c831ecf0fd3ce8c1db2c8f1bdf98930b95f05979e8532749c0352079db1",
-    ".claude/skills/geo-orchestrate/SKILL.md": "b4ede3448a972c1b5839a13035ed7c8ab2a4bf8dd4d1346e7c08a8d488f61247",
+    ".claude/skills/geo-orchestrate/SKILL.md": "1ddb2857b07dbbc37b39fa2457df72983dfd1fcc4f1b40c4dc10a38104a397f2",
     ".claude/skills/geo-press-review/evals/evals.json": "1b72e4f2b182e184334d8727b91d4294096cd8f841f3472039290f5c8e87c70c",
     ".claude/skills/geo-press-review/SKILL.md": "17951ecd4115c3c44a7f8c69353d7f671b2256ac62f06176c91d32a2d47a5039",
     ".claude/skills/geo-publish/evals/evals.json": "767e971f07a11ab945d4b1a75c2f564b429f38dfcdb0a1cdec7cbacc88b7f5ce",
-    ".claude/skills/geo-publish/SKILL.md": "347b1dcd74de44fd5b10b40843e511de72beaebc03371b5c310a6f8a4d1e2b26",
-    ".claude/skills/geo-query/evals/evals.json": "a888f82b81051ff7fb594abb0896d2a933b51771e6012f05084b28c33178e040",
-    ".claude/skills/geo-query/SKILL.md": "3b2774b6e248daa883e1d6b75993efec825a9bef2d48059f6dbfa51d4011b1c4",
+    ".claude/skills/geo-publish/SKILL.md": "563a36cd56b3d5b795b4bc7c8154bc8265656eed40d7e207120488ff34407fd3",
+    ".claude/skills/geo-query/evals/evals.json": "a3342e1ad885863e16cd4c7865134d8690dc14aa3c097ed0c88f39b37fe6e6eb",
+    ".claude/skills/geo-query/SKILL.md": "8e95939b83f3d34ea7af042c8a26594654b7a0a277173c8cf1ad175d340a0a91",
     ".claude/skills/image-banner-recompose/evals/evals.json": "dfe45c88497ad165ee6343c01b63db26ba70c1068500024bc1d754d01f8937fa",
     ".claude/skills/image-banner-recompose/references/api_endpoints.md": "f85ce174f5c005a43d3cc70b907549b1cb44007494082729583bf173e6b17304",
     ".claude/skills/image-banner-recompose/references/qa_check.md": "8bb425c74915f9a6ca17e48258aea7e5cf87a32ccba09e4349ae32be0c68450f",

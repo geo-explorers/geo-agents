@@ -1,6 +1,6 @@
 // shared/geo-read.mjs — read-only Geo GraphQL client for the agents in this repository.
 //
-// COPY of lib/gql.mjs from geo-explorers/content-management, release v1.0.0
+// COPY of lib/gql.mjs from geo-explorers/geo-skills, release v1.0.0
 // (commit a7166025cd81bc3078a217588de78f786a22c7d2).
 // sha256 of the original file: f8fb3f0d0cd64370b74cc3aebaafadfc1b1fd385ae412b74db2ec1879c298940
 //

@@ -2,7 +2,7 @@
 //
 // Written for geo-agents. Its pacing and retry behaviour follow the library's
 // scripts/notion-read.mjs and the notion-operations skill, as released in
-// geo-explorers/content-management v1.0.0
+// geo-explorers/geo-skills v1.0.0
 // (commit a7166025cd81bc3078a217588de78f786a22c7d2). It differs from that script
 // in three ways: failures are thrown instead of returned, Retry-After is
 // honoured, and it can write. This file is deleted once the library ships its
