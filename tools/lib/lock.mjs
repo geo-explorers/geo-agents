@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 /** The only library skills are ever vendored from. */
-export const LIBRARY_REPO = 'geo-explorers/content-management';
+export const LIBRARY_REPO = 'geo-explorers/geo-skills';
 export const LIBRARY_URL = `https://github.com/${LIBRARY_REPO}.git`;
 
 /** Vendored skills live here, one folder per skill. Never hand-edited. */
