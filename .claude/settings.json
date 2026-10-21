@@ -11,6 +11,7 @@
     ],
     "ask": [
       "Bash(node tools/sync-skills.mjs*)",
+      "Bash(node tools/update.mjs)",
       "Bash(* --publish *)",
       "Bash(* --publish)"
     ],
@@ -19,7 +20,36 @@
       "Read(.env.*)",
       "Bash(cat .env*)",
       "Bash(tail .env*)",
-      "Bash(grep * .env*)"
+      "Bash(grep * .env*)",
+      "Bash(*restart-required*)",
+      "Write(runs/.restart-required.json)",
+      "Edit(runs/.restart-required.json)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.mjs\"",
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Skill|Agent|Task|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/restart-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

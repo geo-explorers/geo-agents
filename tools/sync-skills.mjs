@@ -13,10 +13,11 @@
 //      .claude/skills/<skill>/, replacing whatever was vendored before.
 //   4. Writes skills.lock.json: the tag, the commit, and a sha256 per file.
 //   5. Re-reads everything it wrote and checks it against the new lock.
+//   6. Updates the two release lines in README.md (skill count and tag).
 //
-// Who runs it: a maintainer, on purpose, followed by a pull request so reviewers
-// read the real skill diff. An agent never runs it. Nothing here runs at agent
-// start; agents only run verify-lock.mjs.
+// Who runs it: the sync-skills-release workflow when geo-skills publishes a
+// release, or a maintainer on purpose. Both end in a pull request, so the real
+// skill diff is visible. An agent never runs it, and nothing here runs at agent start.
 //
 // It accepts release tags only (vX.Y.Z), never a branch, and only the official
 // repository. No dependencies beyond Node 22+ and git.
@@ -29,6 +30,20 @@ import {
   LIBRARY_REPO, LIBRARY_URL, LOCK_FILE, REPO_ROOT, VENDOR_DIR,
   emptyLock, readLock, sha256File, verifyLock, walk,
 } from './lib/lock.mjs';
+import { updateReadmeStatus } from './lib/readme.mjs';
+
+/** Rewrite README.md's release lines. Warns, never fails, if the lines are missing. */
+function syncReadme({ skillCount, tag, write }) {
+  const path = join(REPO_ROOT, 'README.md');
+  if (!existsSync(path)) { console.warn('README.md not found; release lines not updated.'); return; }
+  const result = updateReadmeStatus(readFileSync(path, 'utf8'), { skillCount, tag });
+  if (!result.found.status || !result.found.count) {
+    console.warn('README.md: could not find the status line or the skill-count sentence; update them by hand.');
+  }
+  if (!result.changed) return;
+  if (write) writeFileSync(path, result.text);
+  console.log(`${write ? 'Updated' : 'Would update'} README.md: ${skillCount} skills, ${tag}.`);
+}
 
 const TAG_RE = /^v\d+\.\d+\.\d+$/;
 const COMMIT_RE = /^[0-9a-f]{40}$/;
@@ -174,6 +189,7 @@ function main() {
     }
 
     if (args.dryRun) {
+      syncReadme({ skillCount: skills.size, tag: args.ref, write: false });
       console.log('\nDry run: nothing was written.');
       return;
     }
@@ -203,6 +219,7 @@ function main() {
       files: Object.fromEntries(Object.entries(files).sort(([a], [b]) => a.localeCompare(b))),
     };
     writeFileSync(join(REPO_ROOT, LOCK_FILE), `${JSON.stringify(lock, null, 2)}\n`);
+    syncReadme({ skillCount: skills.size, tag: args.ref, write: true });
 
     // 5. Prove what is on disk is what the lock says.
     const check = verifyLock();

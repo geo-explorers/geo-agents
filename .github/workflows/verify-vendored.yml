@@ -23,6 +23,10 @@ jobs:
           node-version: '22'
       - name: The lock check catches tampering
         run: node --test tools/verify-lock.test.mjs
+      - name: The session check, restart guard and README updater behave
+        run: node --test tools/preflight.test.mjs tools/sync-skills.test.mjs
+      - name: The updater keeps editors' work safe
+        run: node --test tools/update.test.mjs
       - name: The shared Notion client behaves
         run: node --test shared/notion.test.mjs
       - name: Vendored files match the lock

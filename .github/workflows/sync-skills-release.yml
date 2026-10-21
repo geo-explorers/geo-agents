@@ -1,0 +1,210 @@
+name: sync-skills-release
+
+# Vendors a geo-skills release into this repository, with no person involved.
+#
+# geo-skills' release workflow calls GitHub's repository-dispatch API on this
+# repository right after it tags a release ({tag, commit}), which starts this
+# workflow. Nothing to configure here: no webhook.
+#
+# The bot opens a pull request with the synced files, waits for the required
+# check verify-vendored on that exact commit, then merges it through the REST API.
+# The bot is the org's release GitHub App: the only actor allowed past the
+# approval rule. verify-vendored itself can't be bypassed.
+#
+# No personal tokens: each run asks the app for a token that lasts one hour and
+# can only write contents and pull requests here. The app's id is the variable
+# RELEASE_APP_ID and its private key the secret RELEASE_APP_PRIVATE_KEY, both in
+# the environment `skills-sync`, which only main can use.
+#
+# Manual fallback: Actions → sync-skills-release → Run workflow → enter the tag.
+# Re-running is safe: an already-synced tag is "nothing to do".
+
+on:
+  repository_dispatch:
+    types: [geo-skills-release]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'geo-skills release tag to vendor, for example v1.3.0'
+        required: true
+
+concurrency:
+  group: sync-skills-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  checks: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    environment: skills-sync
+    timeout-minutes: 30
+    env:
+      TAG: ${{ github.event.client_payload.tag || inputs.tag }}
+      EXPECTED_COMMIT: ${{ github.event.client_payload.commit || '' }}
+      LIBRARY_URL: https://github.com/geo-explorers/geo-skills.git
+    steps:
+      - name: Accept exact release tags only
+        run: |
+          if ! [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::\"$TAG\" is not a release tag (vX.Y.Z). Suffixed tags are never synced."; exit 1
+          fi
+          if [ -n "$EXPECTED_COMMIT" ] && ! [[ "$EXPECTED_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::the dispatched commit is not a 40-character hash"; exit 1
+          fi
+
+      - name: Get a one-hour token from the release app
+        id: app
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      # The app's token, not this workflow's: a pull request opened with the
+      # workflow's own token would not start verify-vendored.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ steps.app.outputs.token }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: The tag is a release on geo-skills main
+        id: release
+        run: |
+          lib="$RUNNER_TEMP/geo-skills.git"
+          git init --quiet --bare "$lib"
+          git -C "$lib" fetch --quiet "$LIBRARY_URL" "+refs/tags/$TAG:refs/tags/$TAG" "+refs/heads/main:refs/heads/main"
+          commit=$(git -C "$lib" rev-parse "refs/tags/$TAG^{commit}")
+          if [ -n "$EXPECTED_COMMIT" ] && [ "$commit" != "$EXPECTED_COMMIT" ]; then
+            echo "::error::$TAG points at $commit, not the released $EXPECTED_COMMIT. The tag moved: stop and ask the geo-skills maintainers."; exit 1
+          fi
+          if ! git -C "$lib" merge-base --is-ancestor "$commit" refs/heads/main; then
+            echo "::error::$TAG ($commit) is not on geo-skills main"; exit 1
+          fi
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+
+      - name: Never move backwards
+        id: order
+        run: |
+          node --input-type=module -e "
+            import { readFileSync, appendFileSync } from 'node:fs';
+            import { compareTags } from './tools/lib/preflight.mjs';
+            const current = JSON.parse(readFileSync('skills.lock.json', 'utf8')).library?.tag ?? null;
+            const newer = current && compareTags(current, process.env.TAG) === 1;
+            if (newer) console.log('main already vendors ' + current + ', newer than ' + process.env.TAG + '. Nothing to do.');
+            appendFileSync(process.env.GITHUB_OUTPUT, 'skip=' + (newer ? 'true' : 'false') + '\n');
+          "
+
+      - name: Sync
+        if: steps.order.outputs.skip != 'true'
+        id: sync
+        run: |
+          git show HEAD:skills.lock.json > "$RUNNER_TEMP/old-lock.json"
+          node tools/sync-skills.mjs --ref "$TAG" --commit "${{ steps.release.outputs.commit }}"
+          changed=$(git ls-files --modified --deleted --others --exclude-standard)
+          if [ -z "$changed" ]; then
+            echo "Already at $TAG. Nothing to do."; echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          unexpected=$(printf '%s\n' "$changed" | grep -vE '^(README\.md|skills\.lock\.json|\.claude/skills/.+)$' || true)
+          if [ -n "$unexpected" ]; then
+            echo "::error::the sync changed files it must never touch:"; printf '%s\n' "$unexpected"; exit 1
+          fi
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the pull request
+        if: steps.sync.outputs.changed == 'true'
+        id: pr
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
+          COMMIT: ${{ steps.release.outputs.commit }}
+          BRANCH: bot/sync-skills-${{ env.TAG }}
+        run: |
+          node --input-type=module -e "
+            import { readFileSync, writeFileSync } from 'node:fs';
+            import { diffSkills, describeSkills } from './tools/lib/preflight.mjs';
+            const oldLock = JSON.parse(readFileSync(process.env.RUNNER_TEMP + '/old-lock.json', 'utf8'));
+            const newLock = JSON.parse(readFileSync('skills.lock.json', 'utf8'));
+            const d = diffSkills(oldLock, newLock);
+            const lib = 'https://github.com/geo-explorers/geo-skills';
+            const from = oldLock.library?.tag;
+            const lines = [
+              'Vendors geo-skills **' + process.env.TAG + '** (' + process.env.COMMIT + ').',
+              '',
+              '- Release: ' + lib + '/releases/tag/' + process.env.TAG,
+              from ? '- Changes since ' + from + ': ' + lib + '/compare/' + from + '...' + process.env.TAG : null,
+              '- Skills: ' + (describeSkills(d) || 'no skill files changed'),
+              '',
+              'This pull request **merges itself** once verify-vendored passes. Close it to stop.',
+            ];
+            if (d.added.length || d.removed.length) {
+              lines.push('', '> [!IMPORTANT]', '> A skill was added or removed (' + [...d.added, ...d.removed].map((s) => s.name).join(', ') + '). After the merge, a person updates the README table \"What runs from here\" and the routing in CLAUDE.md.');
+            }
+            writeFileSync(process.env.RUNNER_TEMP + '/pr-body.md', lines.filter((l) => l !== null).join('\n') + '\n');
+          "
+          # Act as the app's bot user, <slug>[bot].
+          bot="${APP_SLUG}[bot]"
+          id=$(gh api "users/${APP_SLUG}%5Bbot%5D" --jq .id)
+          git config user.name "$bot"
+          git config user.email "$id+$bot@users.noreply.github.com"
+          git switch --quiet -c "$BRANCH"
+          git add -A README.md skills.lock.json .claude/skills
+          git commit --quiet -m "Sync skills to geo-skills $TAG" -m "Release: $TAG @ $COMMIT"
+          git push --quiet --force origin "HEAD:refs/heads/$BRANCH"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          number=$(gh pr list --head "$BRANCH" --base main --state open --json number --jq '.[0].number // empty')
+          if [ -z "$number" ]; then
+            url=$(gh pr create --base main --head "$BRANCH" --title "Sync skills to geo-skills $TAG" --body-file "$RUNNER_TEMP/pr-body.md")
+            number=${url##*/}
+          else
+            gh pr edit "$number" --body-file "$RUNNER_TEMP/pr-body.md" >/dev/null
+          fi
+          echo "number=$number" >> "$GITHUB_OUTPUT"
+          echo "Pull request #$number"
+
+      - name: Wait for verify-vendored on this exact commit
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.pr.outputs.sha }}
+        run: |
+          for i in $(seq 1 80); do
+            run=$(gh api "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs?check_name=verify-vendored" \
+              --jq '.check_runs | sort_by(.started_at) | last // empty | "\(.status) \(.conclusion)"')
+            case "$run" in
+              "completed success") echo "verify-vendored passed."; exit 0 ;;
+              completed*) echo "::error::verify-vendored finished as: ${run#completed }"; exit 1 ;;
+            esac
+            sleep 15
+          done
+          echo "::error::verify-vendored did not finish within 20 minutes"; exit 1
+
+      - name: Merge
+        if: steps.sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          NUMBER: ${{ steps.pr.outputs.number }}
+          SHA: ${{ steps.pr.outputs.sha }}
+          BRANCH: bot/sync-skills-${{ env.TAG }}
+        run: |
+          gh api -X PUT "repos/$GITHUB_REPOSITORY/pulls/$NUMBER/merge" \
+            -f sha="$SHA" -f merge_method=squash -f commit_title="Sync skills to geo-skills $TAG (#$NUMBER)" >/dev/null
+          echo "Merged #$NUMBER."
+          gh api -X DELETE "repos/$GITHUB_REPOSITORY/git/refs/heads/$BRANCH" >/dev/null || true
+
+      - name: Tell the pull request what went wrong
+        if: failure() && steps.pr.outputs.number != ''
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          NUMBER: ${{ steps.pr.outputs.number }}
+        run: |
+          gh pr comment "$NUMBER" --body "The automatic sync stopped: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+
+          Fix the cause, then re-run that workflow run, or run **sync-skills-release** by hand with tag \`$TAG\`. A maintainer can also merge this pull request normally once verify-vendored is green."
