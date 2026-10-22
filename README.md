@@ -2,7 +2,7 @@
 
 All Geo agents, one folder each. The skills they use are **vendored** from the [geo-skills](https://github.com/geo-explorers/geo-skills) skills library at one pinned release. This repository never edits them.
 
-> **Status.** 15 skills vendored from geo-skills `v1.2.1`. Two agents live here: geo-research and geo-mirror-refresh. The QA agent is not built yet.
+> **Status.** 16 skills vendored from geo-skills `v1.3.0`. Two agents live here: geo-research and geo-mirror-refresh. The QA agent is not built yet.
 
 Agents read [`CLAUDE.md`](CLAUDE.md) first: it holds the hard rules and the routing.
 
@@ -35,7 +35,7 @@ Both agents log their task in the Work tracker first, as [`workflow/AGENT-WORKFL
 
 ## What runs from here
 
-All 15 library skills are vendored, so their instructions are always at hand. Not all of them can *run* from this repository yet. Some call shared code that lives only in the library (`src/`, `lib/`, root `scripts/`), or expect the library's folder layout. Those are run from a checkout of [geo-skills](https://github.com/geo-explorers/geo-skills) until the library ships its shared code as a package.
+All 16 library skills are vendored, so their instructions are always at hand. Not all of them can *run* from this repository yet. Some call shared code that lives only in the library (`src/`, `lib/`, root `scripts/`), or expect the library's folder layout. Those are run from a checkout of [geo-skills](https://github.com/geo-explorers/geo-skills) until the library ships its shared code as a package.
 
 | Skill | Runs from here? | Why |
 |---|---|---|
