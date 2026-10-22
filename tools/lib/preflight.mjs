@@ -2,7 +2,7 @@
 // No dependencies. Node 22+.
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { LOCK_FILE, VENDOR_DIR } from './lock.mjs';
 
@@ -10,6 +10,10 @@ import { LOCK_FILE, VENDOR_DIR } from './lock.mjs';
 export const MARKER_FILE = 'runs/.restart-required.json';
 
 const OFFICIAL_ORIGIN = /github\.com[:/]geo-explorers\/geo-agents(\.git)?\/?$/i;
+
+/** Where a downloaded copy (no git) reads the team's lock. Tests point it at a local server. */
+export const REMOTE_LOCK_URL = process.env.GEO_AGENTS_REMOTE_LOCK_URL
+  ?? 'https://raw.githubusercontent.com/geo-explorers/geo-agents/main/skills.lock.json';
 
 // ---------- versions ----------
 
@@ -133,7 +137,38 @@ export function gitQuiet(root, args, { timeoutMs } = {}) {
     GIT_SSH_COMMAND: process.env.GIT_SSH_COMMAND ?? 'ssh -o BatchMode=yes -o ConnectTimeout=5',
   };
   const r = spawnSync('git', ['-C', root, ...args], { encoding: 'utf8', env, timeout: timeoutMs, maxBuffer: 64 * 1024 * 1024 });
-  return { code: r.status, out: r.stdout ?? '', err: (r.stderr ?? '').trim(), timedOut: r.error?.code === 'ETIMEDOUT' || Boolean(r.signal) };
+  return {
+    code: r.status, out: r.stdout ?? '', err: (r.stderr ?? '').trim(),
+    timedOut: r.error?.code === 'ETIMEDOUT' || Boolean(r.signal),
+    missing: r.error?.code === 'ENOENT',
+  };
+}
+
+/**
+ * clone   a git checkout whose top folder is this one
+ * copy    no git checkout here, for example a ZIP downloaded from GitHub
+ * no-git  git itself is not installed
+ */
+export function checkoutKind(root) {
+  const r = gitQuiet(root, ['rev-parse', '--show-toplevel']);
+  if (r.missing) return 'no-git';
+  if (r.code !== 0) return 'copy';
+  try {
+    return realpathSync(r.out.trim()) === realpathSync(root) ? 'clone' : 'copy';
+  } catch {
+    return 'copy';
+  }
+}
+
+/** The team's lock straight from GitHub, for a folder without git. */
+export async function fetchRemoteLock({ timeoutMs = 8000 } = {}) {
+  try {
+    const res = await fetch(REMOTE_LOCK_URL, { signal: AbortSignal.timeout(timeoutMs) });
+    if (!res.ok) return { ok: false, error: `GitHub answered ${res.status}` };
+    return { ok: true, lock: await res.json() };
+  } catch (err) {
+    return { ok: false, error: err?.name === 'TimeoutError' ? 'GitHub did not answer in time' : "couldn't reach GitHub" };
+  }
 }
 
 export function originUrl(root) {
@@ -170,7 +205,7 @@ export function readLockAt(root, ref) {
 
 // ---------- what the session-start hook tells Claude ----------
 
-export function sessionContext({ source = 'startup', cmp, lock, marker, fetchError }) {
+export function sessionContext({ source = 'startup', cmp, lock, marker, fetchError, kind = 'clone' }) {
   const lines = ['geo-agents session check (from .claude/hooks/session-start.mjs):'];
   const resume = source !== 'startup';
 
@@ -184,6 +219,31 @@ export function sessionContext({ source = 'startup', cmp, lock, marker, fetchErr
 
   const lockBad = lock && !lock.ok;
   if (lockBad) lines.push(`The vendored skills do not match skills.lock.json (${lock.problems.length} problem(s)).`);
+
+  if (kind !== 'clone') {
+    const why = kind === 'no-git'
+      ? 'git is not installed on this computer, so this folder cannot update itself'
+      : 'this folder is a downloaded copy (for example a ZIP from GitHub), not a git clone, so it cannot update itself';
+    const howTo = 'offer to set up a copy that updates itself (no GitHub account needed; their files here stay as they are): ' +
+      'with their yes, run `node tools/setup-clone.mjs` and follow CLAUDE.md, "A downloaded copy can\'t update itself". ' +
+      (kind === 'no-git' ? 'The first run makes macOS offer to install git; after they install it, run it again. ' : '') +
+      'Never copy, move or delete files in this folder yourself.';
+    const what = describeSkills(cmp?.skills);
+    if (cmp?.status === 'behind' || cmp?.status === 'mismatch') {
+      lines.push(
+        `SKILLS UPDATE AVAILABLE (${cmp.from ?? '?'} → ${cmp.to ?? '?'}${what ? `; changed: ${what}` : ''}), but ${why}. ` +
+        `Before working on the editor's first request, tell them once, in plain words, and ${howTo} ` +
+        `If they decline, carry on with ${cmp.from ?? 'the current skills'} and do not raise it again in this session. Do not run tools/update.mjs here.`,
+      );
+    } else if (cmp?.status === 'current' || cmp?.status === 'ahead') {
+      lines.push(`Skills are up to date (${cmp.from}). Note: ${why}; mention once, in one line, that a git clone would keep it up to date.`);
+    } else {
+      lines.push(`Couldn't check for newer skills (${fetchError ?? cmp?.reason ?? 'unknown reason'}). Also, ${why}. Mention both in one line and carry on.`);
+    }
+    if (lockBad) lines.push('Follow hard rule 2 in CLAUDE.md: stop and tell the editor that a maintainer must restore the vendored skills.');
+    if (source !== 'startup') lines.push('If this was already said earlier in this conversation, do not repeat it.');
+    return lines.join('\n');
+  }
 
   const askUpdate = (why) => {
     lines.push(

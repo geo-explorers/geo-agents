@@ -12,6 +12,7 @@
     "ask": [
       "Bash(node tools/sync-skills.mjs*)",
       "Bash(node tools/update.mjs)",
+      "Bash(node tools/setup-clone.mjs)",
       "Bash(* --publish *)",
       "Bash(* --publish)"
     ],
