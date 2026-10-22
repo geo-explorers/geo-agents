@@ -97,6 +97,24 @@ Editors keep loose files, local edits and old branches. The updater is built for
 
 Never use `git reset --hard`, `git push --force`, `git clean`, `git stash drop`, `git checkout -- <file>` or `git branch -D` without the editor's explicit yes to that exact command. Never delete or edit `runs/.restart-required.json`.
 
+## A downloaded copy can't update itself
+
+A ZIP downloaded from GitHub has no `.git`, so `tools/update.mjs` can't run in it. When the session check says so and newer skills exist, offer once to set up a copy that updates itself. No GitHub account is needed: the repository is public.
+
+1. **Only after the editor said yes.** Run it; Claude Code asks the editor for permission first:
+
+   ```bash
+   node tools/setup-clone.mjs
+   ```
+
+   It clones `geo-agents` into a new folder next to this one (`geo-agents`, or `geo-agents-2` … if taken) and checks the new folder's skills. It prints one JSON object.
+2. Tell the editor its `message`. By `status`:
+   - **`cloned`**: ask them to open the new folder (`path`) in Claude Code and start a new session there. From then on, updates are offered automatically.
+   - **`stopped`, `needs-git`**: macOS offers to install git (the developer tools). They click Install, wait until it finishes, then you run the command again.
+   - **`stopped`, `clone-failed`**: usually no internet; try again later.
+
+Never copy, move or delete files in the downloaded copy yourself. It stays as it was, and the editor deletes it when they are ready.
+
 ## Skills are blocked until a new session
 
 After an update, this session still has the old skills and rules loaded. A hook (`.claude/hooks/restart-guard.mjs`) refuses the Skill tool, subagents and scripts under `.claude/skills/` until a new session starts. While it does:

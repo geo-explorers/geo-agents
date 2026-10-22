@@ -2,7 +2,9 @@
 // Run: node --test tools/preflight.test.mjs
 
 import assert from 'node:assert/strict';
-import { cpSync, existsSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { cpSync, existsSync, writeFileSync } from 'node:fs';
+import { createServer } from 'node:http';
 import { join } from 'node:path';
 import { afterEach, test } from 'node:test';
 import { REPO_ROOT } from './lib/lock.mjs';
@@ -64,6 +66,20 @@ test('sessionContext: what Claude is told for each status', () => {
   assert.doesNotMatch(marked, /Shall I update/);
 });
 
+test('sessionContext: a downloaded copy or a computer without git', () => {
+  const ok = { ok: true, problems: [] };
+  const behind = { status: 'behind', from: 'v1.2.1', to: 'v1.3.0', skills: { changed: [{ name: 'x', from: '0.1.0', to: '0.1.1' }] } };
+  const copy = sessionContext({ kind: 'copy', cmp: behind, lock: ok });
+  assert.match(copy, /SKILLS UPDATE AVAILABLE \(v1\.2\.1 → v1\.3\.0; changed: x 0\.1\.0 → 0\.1\.1\)/);
+  assert.match(copy, /downloaded copy/);
+  assert.match(copy, /node tools\/setup-clone\.mjs/);
+  assert.match(copy, /Do not run tools\/update\.mjs here/);
+  assert.doesNotMatch(copy, /Shall I update now/);
+  assert.match(sessionContext({ kind: 'no-git', cmp: behind, lock: ok }), /macOS offer to install git/);
+  assert.match(sessionContext({ kind: 'copy', cmp: { status: 'current', from: 'v1.3.0' }, lock: ok }), /up to date \(v1\.3\.0\).*git clone would keep/);
+  assert.match(sessionContext({ kind: 'copy', cmp: { status: 'unknown' }, fetchError: 'offline', lock: ok }), /Couldn't check.*offline.*downloaded copy/s);
+});
+
 test('isSkillWork: skills, agents and vendored scripts only', () => {
   assert.equal(isSkillWork('Skill', { skill: 'geo-publish' }), true);
   assert.equal(isSkillWork('Agent', {}), true);
@@ -119,6 +135,35 @@ test('restart guard: with a marker, blocks skill work and allows the rest', () =
   assert.equal(guard(root, call('Bash', { command: 'ls' })).code, 0);
   assert.equal(guard(root, call('Read', { file_path: 'README.md' })).code, 0);
   assert.equal(guard(root, 'not json').code, 2);
+});
+
+function runHook(root, env, input) {
+  return new Promise((resolve) => {
+    const child = spawn('node', [join(root, '.claude/hooks/session-start.mjs')], { cwd: root, env });
+    let out = '';
+    child.stdout.on('data', (d) => { out += d; });
+    child.on('close', (code) => resolve({ code, out }));
+    child.stdin.end(input);
+  });
+}
+
+test('session check in a downloaded copy reads the team lock over HTTPS', async () => {
+  const root = guardRoot();
+  const mine = { library: { tag: 'v1.2.1', commit: 'a'.repeat(40) }, skills: {}, files: { [`${S}/x/SKILL.md`]: '1' } };
+  const team = { library: { tag: 'v1.3.0', commit: 'b'.repeat(40) }, skills: {}, files: { [`${S}/x/SKILL.md`]: '2' } };
+  writeFileSync(join(root, 'skills.lock.json'), JSON.stringify(mine));
+  const server = createServer((req, res) => { res.setHeader('content-type', 'application/json'); res.end(JSON.stringify(team)); });
+  await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  try {
+    const env = { ...box.env, GEO_AGENTS_REMOTE_LOCK_URL: `http://127.0.0.1:${server.address().port}/skills.lock.json` };
+    const r = await runHook(root, env, JSON.stringify({ source: 'startup' }));
+    assert.equal(r.code, 0);
+    const text = JSON.parse(r.out).hookSpecificOutput.additionalContext;
+    assert.match(text, /SKILLS UPDATE AVAILABLE \(v1\.2\.1 → v1\.3\.0/);
+    assert.match(text, /downloaded copy/);
+  } finally {
+    server.close();
+  }
 });
 
 test('session check: startup clears the marker, resume keeps it', () => {

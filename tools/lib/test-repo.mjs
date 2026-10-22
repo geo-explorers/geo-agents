@@ -18,6 +18,7 @@ export function sandbox() {
     GIT_CONFIG_NOSYSTEM: '1',
     GIT_CONFIG_GLOBAL: gitconfig,
     GEO_AGENTS_ALLOW_ANY_ORIGIN: '1',
+    GEO_AGENTS_REMOTE_LOCK_URL: 'http://127.0.0.1:9/unreachable',
   };
   delete env.GIT_DIR;
   delete env.GIT_WORK_TREE;

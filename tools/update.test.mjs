@@ -2,12 +2,12 @@
 // Run: node --test tools/update.test.mjs
 
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { cpSync, existsSync, readFileSync, realpathSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, test } from 'node:test';
 import { VENDOR_DIR } from './lib/lock.mjs';
 import { MARKER_FILE } from './lib/preflight.mjs';
-import { makeFixture, write } from './lib/test-repo.mjs';
+import { makeFixture, sh, write } from './lib/test-repo.mjs';
 
 let fx;
 afterEach(() => fx?.cleanup());
@@ -178,4 +178,43 @@ test('session check after an update: resume keeps the block, startup clears it',
   assert.equal(existsSync(join(fx.editor, MARKER_FILE)), true);
   assert.match(sessionCheck('startup'), /Skills are up to date \(v1\.1\.0\)/);
   assert.equal(existsSync(join(fx.editor, MARKER_FILE)), false);
+});
+
+// ---------- tools/setup-clone.mjs, for a downloaded copy (no .git) ----------
+
+function zipCopy(name = 'Downloads/geo-agents-main') {
+  const zip = join(fx.dir, name);
+  cpSync(fx.editor, zip, { recursive: true, filter: (src) => !src.split(/[\\/]/).includes('.git') });
+  return zip;
+}
+function setupClone(zip) {
+  const r = sh({ ...fx.env, GEO_AGENTS_CLONE_URL: fx.remote }, zip, 'node', [join(zip, 'tools/setup-clone.mjs')]);
+  return { code: r.code, ...JSON.parse(r.out) };
+}
+
+test('setup-clone: makes a clone beside a downloaded copy and leaves the copy as it was', () => {
+  fx = makeFixture();
+  fx.release('v1.1.0');
+  const zip = zipCopy();
+  write(zip, 'my-notes.md', 'mine\n');
+  const r = setupClone(zip);
+  assert.equal(r.code, 0);
+  assert.equal(r.status, 'cloned');
+  assert.equal(r.path, join(realpathSync(fx.dir), 'Downloads', 'geo-agents'));
+  assert.equal(r.tag, 'v1.1.0');
+  assert.equal(r.lockOk, true);
+  assert.equal(readFileSync(join(zip, 'my-notes.md'), 'utf8'), 'mine\n');
+  assert.ok(existsSync(join(r.path, '.git')));
+});
+
+test('setup-clone: picks a free folder name and refuses inside a clone', () => {
+  fx = makeFixture();
+  const zip = zipCopy();
+  write(fx.dir, 'Downloads/geo-agents/keep.txt', 'already here\n');
+  const r = setupClone(zip);
+  assert.equal(r.path, join(realpathSync(fx.dir), 'Downloads', 'geo-agents-2'));
+  assert.equal(readFileSync(join(fx.dir, 'Downloads/geo-agents/keep.txt'), 'utf8'), 'already here\n');
+  const again = sh({ ...fx.env, GEO_AGENTS_CLONE_URL: fx.remote }, fx.editor, 'node', [join(fx.editor, 'tools/setup-clone.mjs')]);
+  assert.equal(again.code, 2);
+  assert.equal(JSON.parse(again.out).reason, 'already-a-clone');
 });

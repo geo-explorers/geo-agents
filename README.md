@@ -16,7 +16,7 @@ cd geo-agents
 node tools/verify-lock.mjs
 ```
 
-The last command must print `OK`. Start Claude Code from this folder so the rules, the skills, the allowlist and the session check all load. Claude Code runs this repository's hooks only after you trust the folder, the first time you open it.
+The last command must print `OK`. No GitHub account is needed. If you downloaded the ZIP instead of cloning, that works too: when newer skills exist, Claude offers to make a copy that updates itself (`node tools/setup-clone.mjs`) and asks you to open the new folder. Start Claude Code from this folder so the rules, the skills, the allowlist and the session check all load. Claude Code runs this repository's hooks only after you trust the folder, the first time you open it.
 
 Secrets go in a `.env` file that you create and fill in yourself, starting from `.env.example`. It is git-ignored, and agents are not allowed to read it. It needs only `NOTION_TOKEN`; no agent here needs a wallet key.
 
@@ -135,7 +135,7 @@ All of them run in GitHub on every pull request as the `verify-vendored` check, 
 | `docs/` | The library's `documentation/`, moved here. geo-research reads it |
 | `workflow/` | Task and QA-issue lifecycle guide, and `ids.json` |
 | `skills.lock.json` | Library tag, commit, and a fingerprint per vendored file |
-| `tools/` | `sync-skills.mjs` (the bot and maintainers), `update.mjs` (editors, through Claude) and `verify-lock.mjs` (everyone) |
+| `tools/` | `sync-skills.mjs` (the bot and maintainers), `update.mjs` and `setup-clone.mjs` (editors, through Claude) and `verify-lock.mjs` (everyone) |
 | `runs/` | Git-ignored: ledgers, verdicts, fetched pages, update backups and the restart marker |
 | `.github/workflows/verify-vendored.yml` | The required check |
 | `.github/workflows/sync-skills-release.yml` | Vendors each geo-skills release through a bot pull request |
