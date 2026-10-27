@@ -18,7 +18,7 @@ node tools/verify-lock.mjs
 
 The last command must print `OK`. No GitHub account is needed. If you downloaded the ZIP instead of cloning, that works too: when newer skills exist, Claude offers to make a copy that updates itself (`node tools/setup-clone.mjs`) and asks you to open the new folder. Start Claude Code from this folder so the rules, the skills, the allowlist and the session check all load. Claude Code runs this repository's hooks only after you trust the folder, the first time you open it.
 
-Secrets go in a `.env` file that you create and fill in yourself, starting from `.env.example`. It is git-ignored, and agents are not allowed to read it. It needs only `NOTION_TOKEN`; no agent here needs a wallet key.
+Secrets go in a `.env` file that you create and fill in yourself, starting from `.env.example`. It is git-ignored, and agents are not allowed to read it. It uses the same variable names as geo-skills: `NOTION_TOKEN` for the agents and the Notion skills; `GEO_PRIVATE_KEY` and `DEMO_SPACE_ID` for the skills that publish to Geo; `INJECT_BASE_URL` and `INJECT_API_KEY` for geo-publish's inject mode. Fill in only what you use. The agents here need only `NOTION_TOKEN`.
 
 ## Run an agent
 
