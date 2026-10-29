@@ -19,7 +19,7 @@ Hard rules and routing for every agent in this repository. They live here, with 
 
 ## Hard rules
 
-1. **Never write to Geo by hand.** Any publish, create, update or delete MUST go through the **geo-publish** skill. Never write or run a raw SDK or publish script yourself. geo-publish runs the mandatory safeguards: duplicate check, schema check, type-required check, then a dry run and an explicit confirmation. A raw script skips all of them. **One exception:** changes made in a mirrored Notion table (any table with a `Geo ID` column) are published with **geo-mirror Part 2** (`plan-notion-changes.mjs`, then `sync-to-geo.mjs`), which has its own approval, live-value checks and dry run. Creating entities and changing relations still go through geo-publish.
+1. **Never write to Geo by hand.** Every Geo write happens inside one of four gated skill flows, each with its own dry run and the editor's explicit approval: **geo-publish** (create, update), **geo-clean** (delete, merge, clean-up — rule 3), **geo-claim-grouping** (claim edges) or **geo-mirror Part 2** (reviewed edits from a mirrored Notion table, with `plan-notion-changes.mjs`, then `sync-to-geo.mjs`). Outside those flows, never write or run a raw SDK or publish script yourself. geo-publish runs the mandatory safeguards: duplicate check, schema check, type-required check, then a dry run and an explicit confirmation. A raw script skips all of them. Creating entities and changing relations go through geo-publish.
 
 2. **The vendored skills are verified, never edited and never downloaded.** Everything under `.claude/skills/` is a copy of the skills library at one release, and `skills.lock.json` records a fingerprint for every file. If `node tools/verify-lock.mjs` fails, or a skill you need is missing, **STOP — do not improvise.** Tell the user, verbatim:
    > "The vendored skills do not match `skills.lock.json`, so I have stopped. A maintainer needs to restore them with `node tools/sync-skills.mjs --ref <tag>` and review the result."
@@ -43,10 +43,11 @@ Decide which skill applies before doing anything, then use it. Do not hand-write
 | find or merge duplicates, delete anything, fix data types, move or copy entities, clean the graph | **geo-clean** |
 | compare external press with Geo; "what should we publish next" | **geo-press-review** |
 | write claim-grouping results into a Notion Claims mirror as review columns | **geo-claim-grouping-notion** |
+| discover or review bounty submissions, publish review reports, draft curator feedback | **geo-submission-review** |
 
 If a request is ambiguous, ask which skill. Do not guess.
 
-**Not every skill can run from this repository yet.** Skills that publish to Geo or call the library's shared code still run from a checkout of the skills library: geo-publish, geo-clean, geo-orchestrate, geo-claim-grouping, geo-claim-grouping-notion, geo-mirror-and-group, geo-press-review, and the write-back half of geo-mirror. If a task needs one of them, say so and stop; do not copy the missing code here or rewrite the skill's steps by hand. The full table is in [`README.md`](README.md).
+**Every skill runs from this folder.** Each one carries its own scripts in `.claude/skills/<skill>/scripts/`. Run commands from this folder. Generated scripts go in `scripts/` here (git-ignored), never inside `.claude/skills/`, and import a skill's helpers as `../.claude/skills/<skill>/scripts/lib/<file>.ts`. If a script says a package is missing, run `bun install` and try again. Never send the editor to another repository to run a skill.
 
 ### Agents
 

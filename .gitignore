@@ -7,3 +7,9 @@ node_modules/
 # run artifacts: ledgers, verdicts, fetched pages
 runs/*
 !runs/.gitkeep
+
+# what the skills generate when run from here: dated ops scripts, fix packages,
+# merge snapshots and printed ops
+/scripts/
+/snapshots/
+/output/

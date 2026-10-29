@@ -8,15 +8,16 @@ Agents read [`CLAUDE.md`](CLAUDE.md) first: it holds the hard rules and the rout
 
 ## Install
 
-You need `git` and Node 22 or newer. There is nothing else to install: the tools have no dependencies.
+You need `git`, Node 22 or newer, and [Bun](https://bun.sh) (the skills' scripts run with it).
 
 ```bash
 git clone https://github.com/geo-explorers/geo-agents.git
 cd geo-agents
+bun install
 node tools/verify-lock.mjs
 ```
 
-The last command must print `OK`. No GitHub account is needed. If you downloaded the ZIP instead of cloning, that works too: when newer skills exist, Claude offers to make a copy that updates itself (`node tools/setup-clone.mjs`) and asks you to open the new folder. Start Claude Code from this folder so the rules, the skills, the allowlist and the session check all load. Claude Code runs this repository's hooks only after you trust the folder, the first time you open it.
+`bun install` fetches the packages the skills' scripts use (the Geo SDK and a few more); run it again when an update says so. The last command must print `OK`. No GitHub account is needed. If you downloaded the ZIP instead of cloning, that works too: when newer skills exist, Claude offers to make a copy that updates itself (`node tools/setup-clone.mjs`) and asks you to open the new folder. Start Claude Code from this folder so the rules, the skills, the allowlist and the session check all load. Claude Code runs this repository's hooks only after you trust the folder, the first time you open it.
 
 Secrets go in a `.env` file that you create and fill in yourself, starting from `.env.example`. It is git-ignored, and agents are not allowed to read it. It uses the same variable names as geo-skills: `NOTION_TOKEN` for the agents and the Notion skills; `GEO_PRIVATE_KEY` and `DEMO_SPACE_ID` for the skills that publish to Geo; `INJECT_BASE_URL` and `INJECT_API_KEY` for geo-publish's inject mode. Fill in only what you use. The agents here need only `NOTION_TOKEN`.
 
@@ -33,33 +34,13 @@ Secrets go in a `.env` file that you create and fill in yourself, starting from 
 
 Both agents log their task in the Work tracker first, as [`workflow/AGENT-WORKFLOW.md`](workflow/AGENT-WORKFLOW.md) requires.
 
-## What runs from here
+## Running skills
 
-All 16 library skills are vendored, so their instructions are always at hand. Not all of them can *run* from this repository yet. Some call shared code that lives only in the library (`src/`, `lib/`, root `scripts/`), or expect the library's folder layout. Those are run from a checkout of [geo-skills](https://github.com/geo-explorers/geo-skills) until the library ships its shared code as a package.
+All 16 library skills are vendored, and every one runs from here: work only in this folder. Each skill folder under `.claude/skills/` holds everything it runs in its own `scripts/`, and the packages come from `bun install`.
 
-| Skill | Runs from here? | Why |
-|---|---|---|
-| geo-query | Yes | Plain GraphQL over HTTP. Its client is here as `shared/geo-read.mjs` |
-| geo-mirror, Geo → Notion | Yes | The mirroring scripts need nothing outside the skill folder |
-| geo-mirror, Notion → Geo | No | `sync-to-geo.mjs` imports the library's `src/functions.ts` and the Geo SDK |
-| ontology-advisor | Yes | Its scripts use only what is in the skill folder |
-| geo-describe | Yes | Its similarity check needs the Python package `sentence_transformers` |
-| geo-discovery | Partly | The read stages are self-contained. The publish and dashboard scripts need the Geo SDK |
-| notion-operations | Yes | It is guidance. The helper it names, `scripts/notion-read.mjs`, lives in the library |
-| daily-report | Yes | Self-contained |
-| image-banner-recompose | Yes | Self-contained |
-| geo-publish | No | Its publish scripts import `src/functions`, `lib/inject.ts` and `src/xlsx-to-csv.cjs` |
-| geo-clean | No | Uses `src/` and `validate_migration.ts` |
-| geo-orchestrate | No | Generates scripts that import `src/` |
-| geo-claim-grouping | No | `discover_candidates.ts` imports `src/functions.ts` |
-| geo-claim-grouping-notion | No | Its own scripts are self-contained, but the discovery step it starts with is geo-claim-grouping's |
-| geo-mirror-and-group | No | `run-pipeline.mjs` builds paths in the library's `skills/<tier>/` layout |
-| geo-press-review | No | Runs `scripts/press-review-coverage-map.ts` from the library root |
-
-Two more things to know when a skill is run from here:
-
-- **Paths in the instructions are the library's.** A skill may say `skills/actionable/geo-mirror/scripts/…`. Here the same file is at `.claude/skills/geo-mirror/scripts/…`. The vendored files are never edited to fix this.
-- **This table was built by reading imports and paths, not by running each skill.** The two agents that move here in step 5 are each proven with a supervised run.
+- **Run commands from this folder.** A skill's instructions give paths like `.claude/skills/geo-mirror/scripts/…`.
+- **Generated scripts go in `scripts/`** at the top of this folder (git-ignored), never inside `.claude/skills/`. They import a skill's helpers as `../.claude/skills/<skill>/scripts/lib/<file>.ts`. Merge snapshots and printed ops land in `snapshots/` and `output/`, also git-ignored.
+- **Publishing still needs** `GEO_PRIVATE_KEY` and `DEMO_SPACE_ID` in `.env`, and always goes through the skill's dry run and your confirmation.
 
 ## Update the skills
 
@@ -74,7 +55,7 @@ When a skill change is merged in geo-skills, its release workflow tags a release
 3. opens a pull request on the branch `bot/sync-skills-<tag>` with the release link and the skills that changed;
 4. waits for the required `verify-vendored` check on that exact commit, then merges the pull request itself.
 
-Close the pull request to stop a release from landing. If a skill was added or removed, the pull request says so: the table in [What runs from here](#what-runs-from-here) and the routing in `CLAUDE.md` still need a person.
+Close the pull request to stop a release from landing. If a skill was added or removed, the pull request says so: the routing in `CLAUDE.md` still needs a person.
 
 If the workflow fails, its pull request gets a comment with the run link. Re-run it, or run it by hand: **Actions → sync-skills-release → Run workflow**, with the tag.
 
@@ -135,6 +116,8 @@ All of them run in GitHub on every pull request as the `verify-vendored` check, 
 | `docs/` | The library's `documentation/`, moved here. geo-research reads it |
 | `workflow/` | Task and QA-issue lifecycle guide, and `ids.json` |
 | `skills.lock.json` | Library tag, commit, and a fingerprint per vendored file |
+| `package.json`, `bun.lock` | The packages the skills' scripts import, the same versions as geo-skills |
+| `scripts/`, `snapshots/`, `output/` | Git-ignored: what the skills generate when they run here |
 | `tools/` | `sync-skills.mjs` (the bot and maintainers), `update.mjs` and `setup-clone.mjs` (editors, through Claude) and `verify-lock.mjs` (everyone) |
 | `runs/` | Git-ignored: ledgers, verdicts, fetched pages, update backups and the restart marker |
 | `.github/workflows/verify-vendored.yml` | The required check |
