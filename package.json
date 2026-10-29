@@ -1,0 +1,13 @@
+{
+  "name": "geo-agents",
+  "private": true,
+  "type": "module",
+  "description": "Packages the vendored skills' scripts import. Keep in step with geo-skills' package.json.",
+  "dependencies": {
+    "@geoprotocol/geo-sdk": "^0.20.2",
+    "@geoprotocol/grc-20": "^0.4.1",
+    "dotenv": "^17.2.4",
+    "viem": "^2.45.3",
+    "xlsx": "^0.18.5"
+  }
+}
