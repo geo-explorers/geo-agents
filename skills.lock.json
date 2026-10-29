@@ -1,10 +1,10 @@
 {
   "library": {
     "repo": "geo-explorers/geo-skills",
-    "tag": "v1.3.2",
-    "commit": "c84f8a140946dc426ee45e28f61f907bb8467f19"
+    "tag": "v1.4.0",
+    "commit": "5513c5b8a3cab292d23abca19a510f51c86dd7ce"
   },
-  "vendoredAt": "2026-10-23",
+  "vendoredAt": "2026-10-29",
   "skills": {
     "daily-report": {
       "tier": "non-actionable",
@@ -12,15 +12,15 @@
     },
     "geo-claim-grouping": {
       "tier": "actionable",
-      "version": "0.7.3"
+      "version": "0.7.4"
     },
     "geo-claim-grouping-notion": {
       "tier": "non-actionable",
-      "version": "0.2.0"
+      "version": "0.2.1"
     },
     "geo-clean": {
       "tier": "actionable",
-      "version": "0.5.2"
+      "version": "0.5.3"
     },
     "geo-describe": {
       "tier": "non-actionable",
@@ -32,31 +32,31 @@
     },
     "geo-mirror": {
       "tier": "actionable",
-      "version": "0.13.1"
+      "version": "0.13.2"
     },
     "geo-mirror-and-group": {
       "tier": "non-actionable",
-      "version": "1.0.1"
+      "version": "1.0.2"
     },
     "geo-orchestrate": {
       "tier": "actionable",
-      "version": "0.2.1"
+      "version": "0.2.2"
     },
     "geo-press-review": {
       "tier": "non-actionable",
-      "version": "0.5.3"
+      "version": "0.5.4"
     },
     "geo-publish": {
       "tier": "actionable",
-      "version": "0.12.1"
+      "version": "0.12.2"
     },
     "geo-query": {
       "tier": "non-actionable",
-      "version": "0.2.12"
+      "version": "0.2.13"
     },
     "geo-submission-review": {
       "tier": "actionable",
-      "version": "0.7.4"
+      "version": "0.7.5"
     },
     "image-banner-recompose": {
       "tier": "non-actionable",
@@ -64,7 +64,7 @@
     },
     "notion-operations": {
       "tier": "non-actionable",
-      "version": "1.0.1"
+      "version": "1.0.2"
     },
     "ontology-advisor": {
       "tier": "non-actionable",
@@ -77,21 +77,28 @@
     ".claude/skills/daily-report/SKILL.md": "d3e401e98b49052868c787297d64cd06b60ddec3b890aca13f6dd0f3826507de",
     ".claude/skills/geo-claim-grouping-notion/evals/evals.json": "ca93db14486f471da73f7a159b6ed785dacc1a2a687d471fcbab0d3abfad7ed5",
     ".claude/skills/geo-claim-grouping-notion/references/column-contract.md": "adf0490c318a2e557bb479fa64e1d7bef31a65dc36c8c50a3fc3207eb36b0ef7",
-    ".claude/skills/geo-claim-grouping-notion/scripts/existing-edges-from-geo.mjs": "e7d74b13eb34b90511d982812381c2e976b0ad212c807b55f9b601806039e08f",
-    ".claude/skills/geo-claim-grouping-notion/scripts/roster-from-notion.mjs": "206572c4a9d20ca60e68db27f762db9fb170f3c555c07aede5da37932284237d",
-    ".claude/skills/geo-claim-grouping-notion/scripts/scope-candidates.mjs": "f95f81bedbf88c2298a06e41f85608544b9eab8f1e4d2264ff27ec1a3a21641c",
-    ".claude/skills/geo-claim-grouping-notion/scripts/write-grouping-to-notion.mjs": "22f0bb2952ab3572d33d68fa905d48a08d65cfce3494a0efc55d8b31e61fd5fe",
-    ".claude/skills/geo-claim-grouping-notion/SKILL.md": "82c97939d08ad59b75b292558272733bdf92c3e9f949d1f4f62782ec59f4f87b",
-    ".claude/skills/geo-claim-grouping/evals/evals.json": "d8dce9629b04322d8d263eb90cd3c02b3633ec8e7a1912a35136abece62b8e16",
+    ".claude/skills/geo-claim-grouping-notion/scripts/existing-edges-from-geo.mjs": "ffb62638416970797b598cf54f4ebe25056a9c30fe553192d3b2957bd64f5ba0",
+    ".claude/skills/geo-claim-grouping-notion/scripts/roster-from-notion.mjs": "0bb8dcdb0451af1b3a007738575e611c85b3f81473bb23891be080f4448f10ee",
+    ".claude/skills/geo-claim-grouping-notion/scripts/scope-candidates.mjs": "89c9c33d811f1d8577484618d464b4299195032aae9a315f5365c5b07dc09063",
+    ".claude/skills/geo-claim-grouping-notion/scripts/write-grouping-to-notion.mjs": "63b2067eeded0842d85dce648b45d2ae4512e8ff25fa2501caebbb55c855c5c2",
+    ".claude/skills/geo-claim-grouping-notion/SKILL.md": "78e3b7a2b898c2bd1fd2fb9bc31121aad57b7bdaaf1c7832727773a02f46066e",
+    ".claude/skills/geo-claim-grouping/evals/evals.json": "95db1e7ffea6b4f6f29cb03b16c24faa2281e5acc824775604124ecc082cd289",
     ".claude/skills/geo-claim-grouping/references/adjudication-rubric.md": "8998b708102e3392558bd630ab2910502aae8bfab0d637fb732545cb6815e8ec",
-    ".claude/skills/geo-claim-grouping/references/ops-script-template.md": "b82a84c63fd80704bd1cc38a467be365415a2fdb9c165aecdac5803b88dcab10",
-    ".claude/skills/geo-claim-grouping/references/queries-and-signals.md": "dad740362e29975af300534309b4fa6142b7395aa00065d4b812ee356ba06d49",
-    ".claude/skills/geo-claim-grouping/scripts/discover_candidates.ts": "02ff7225db42097a598c01d443295bbe0d30859c85faea68f20ec50dde0b22d3",
-    ".claude/skills/geo-claim-grouping/SKILL.md": "429981ad94ce6f9e3e3690ea400fa8652cb9e4966a19e077f9b2a44bc5c02721",
-    ".claude/skills/geo-clean/big-merge.md": "69fe3405ac33dc9ff82c4794bf643fc8a4eeac97227e265f44c3233ecb60fa4d",
-    ".claude/skills/geo-clean/evals/evals.json": "ae899b9bea68a6fe9ca19da697d1d5af42075d4a1273c82a8c6c96f0f4cc02f1",
-    ".claude/skills/geo-clean/reference.md": "c07e5d64e57ac66fbccd9033977a275f01dd71ad5caa4410f922d4620ff2dc78",
-    ".claude/skills/geo-clean/SKILL.md": "d7d948a97a4fa03ed18befce264453062daf8c1ef642c5aab0aca482436b8e5c",
+    ".claude/skills/geo-claim-grouping/references/ops-script-template.md": "458beefc8ef027c0d39e4767a0cf4b9904e544a9eb4a84c09cfccd453e6d5469",
+    ".claude/skills/geo-claim-grouping/references/queries-and-signals.md": "aff538f54a219bc98df4fe4d6a09528eae05134a24050f8fa7fad44964bb6f13",
+    ".claude/skills/geo-claim-grouping/scripts/discover_candidates.ts": "d442ddaf151c1952f7d99a7bc6e9e34c6780af794206a3e757b67535b8617199",
+    ".claude/skills/geo-claim-grouping/scripts/lib/constants.ts": "c3e05385587d0b0a791215f4fa92704cfac324bcc2ac8741841d9760f63c7eea",
+    ".claude/skills/geo-claim-grouping/scripts/lib/functions.ts": "1c92d97b379f6a75491e6205f7811173a2f0e3761245c9e977197c41ee977f77",
+    ".claude/skills/geo-claim-grouping/SKILL.md": "a5ac12b22cd05ca83711701a9a709f1d147d98487efa17ba59ddecfcbfbaed17",
+    ".claude/skills/geo-clean/big-merge.md": "94eeb6455fa565c313329637b5b5e78ad1db2b5864f19ff3a754f848cd257c85",
+    ".claude/skills/geo-clean/evals/evals.json": "414b716f43336b0ae59d7fbdbeaa0ed0193f77a88427b531a7d78b8387c60b3d",
+    ".claude/skills/geo-clean/reference.md": "996c65fcba5089e656fa0f905c7cc8a958ff7d6941715f9d695fd328d9805b7c",
+    ".claude/skills/geo-clean/scripts/lib/constants.ts": "c3e05385587d0b0a791215f4fa92704cfac324bcc2ac8741841d9760f63c7eea",
+    ".claude/skills/geo-clean/scripts/lib/entity_ops.ts": "8849c9c069d4adcd7a8157f606e7bc366706374edbd021d7d48e160f1e74e27f",
+    ".claude/skills/geo-clean/scripts/lib/functions.ts": "1c92d97b379f6a75491e6205f7811173a2f0e3761245c9e977197c41ee977f77",
+    ".claude/skills/geo-clean/scripts/lib/select_canonical.ts": "5e7f609ab6464041a2faff8e12d3ece8a8794dd81543af46d83054d9aab27a7f",
+    ".claude/skills/geo-clean/scripts/validate_migration.ts": "f185094a7d6c3cae7f04c06828106842e659e554c4eb40cdcd8389df95f924a1",
+    ".claude/skills/geo-clean/SKILL.md": "a528ef9d837a0810763f2bbe0609d3029e1d3eeb316134dd73af3e29b78758d0",
     ".claude/skills/geo-describe/evals/evals.json": "24bc288ef9d17cb27da8b06de3c0bf3960d7d4c7c8467559da388f2df27d221b",
     ".claude/skills/geo-describe/references/accuracy-verification.md": "e55a6a3e9ffce975fa59887b9cd18795066280fe7cfa7f10a563d195a1b318f2",
     ".claude/skills/geo-describe/references/closeness-and-accuracy-checks.md": "6c91afa9dd42ef31da0d436319a1912cb14c4b2428fcf32b1e7a0e85891413b3",
@@ -116,28 +123,44 @@
     ".claude/skills/geo-discovery/scripts/theme_heat.py": "33d8e412f6488adb24111075732a3805fefef62b537b9ec0c315eac30711e8a7",
     ".claude/skills/geo-discovery/SKILL.md": "333b2272c300fa96fdcc5293e77b7624fc2f296ca2f622cf1541c6920c98e7d3",
     ".claude/skills/geo-mirror-and-group/evals/evals.json": "56a23d67437a120d8667b1b0fe26d3e050ebe3040e21f2beb624545c2d9938c7",
-    ".claude/skills/geo-mirror-and-group/scripts/run-pipeline.mjs": "2dffa20babf9f0ceb4d6070c33cd04c6d92d7bd75ceabf504e23636244c9ebd8",
-    ".claude/skills/geo-mirror-and-group/SKILL.md": "7346589e391a44401f843600bb2b010791daf37fc3a6d6bbee47080d176277dd",
+    ".claude/skills/geo-mirror-and-group/scripts/run-pipeline.mjs": "0d2f35aded98276b9b1ae15bca05dac87bea03a6b338e7241f39d3201a6848f8",
+    ".claude/skills/geo-mirror-and-group/SKILL.md": "c17b84ce283a3c39ff35b9e8ec607578f019f76cc968f7d582e584f310b45abd",
     ".claude/skills/geo-mirror/evals/evals.json": "1c00079fe8532702acbe8d842ddc52501bfcd06f9bf67525bdc6c473d126d431",
     ".claude/skills/geo-mirror/scripts/bulk-set-property.mjs": "cbb9d3ec71b1b89f77d77e748032e93fdcfca50f1f567d1701001e3ab189c840",
     ".claude/skills/geo-mirror/scripts/diff-notion-vs-geo.mjs": "7ef96a6ca6d07fe31bf8260b5f88aed6beec2b7095c7710fb924d3f76d5e9f14",
     ".claude/skills/geo-mirror/scripts/extract-page-collections.mjs": "74172ff5664a5413df0af85f41af46270554eb32419a031e319e2742181d5fdb",
     ".claude/skills/geo-mirror/scripts/extract-space.mjs": "08dd7c8960f3b46125bfd6e2b2a233b26706595c4703679553e8b96ed8e23cfa",
+    ".claude/skills/geo-mirror/scripts/lib/constants.ts": "c3e05385587d0b0a791215f4fa92704cfac324bcc2ac8741841d9760f63c7eea",
+    ".claude/skills/geo-mirror/scripts/lib/functions.ts": "1c92d97b379f6a75491e6205f7811173a2f0e3761245c9e977197c41ee977f77",
     ".claude/skills/geo-mirror/scripts/mirror-claims-topics.mjs": "4029be6d30af6713264210ca391d8eb8017a0c936158f7a810a62b804d469524",
     ".claude/skills/geo-mirror/scripts/mirror-sources.mjs": "d20cd85580a5759c18157ddaeadeb8a60b1f2818238e26d59b0cc9126f91934a",
     ".claude/skills/geo-mirror/scripts/mirror-to-notion.mjs": "91713ad72583659c09d101a53cbe5a331042a4b349ba28105f68d09e6dcdb3e8",
     ".claude/skills/geo-mirror/scripts/notion-geo-tables.mjs": "2ee48dbbc2f8426ad4f33311feb01c3ae8731efa9c3cd30614ccb2d71d7f0134",
     ".claude/skills/geo-mirror/scripts/plan-notion-changes.mjs": "a71c2ce50d98b3008aa569f61ff6452cb0411b89496d68480e2306a3e6c444e4",
-    ".claude/skills/geo-mirror/scripts/sync-to-geo.mjs": "82d52c64be1813d292a47e233341f11d7e91d4fbd6c2046e8b5707e9886d652b",
-    ".claude/skills/geo-mirror/SKILL.md": "cf6d1eb800efd9c71be6615ea2470e208ae7e2ea44272bddbae779c27671ca9a",
+    ".claude/skills/geo-mirror/scripts/sync-to-geo.mjs": "b58a5192369b4010d3b0db6aad9f2ac08ec5c0587c4ab9e155be34955b7447a1",
+    ".claude/skills/geo-mirror/SKILL.md": "cf4b6c956dc71e2051a3f2387b47ec5c9cc3dad22b64b6a93a12e263dd1b2d67",
     ".claude/skills/geo-orchestrate/evals/evals.json": "0c175c831ecf0fd3ce8c1db2c8f1bdf98930b95f05979e8532749c0352079db1",
-    ".claude/skills/geo-orchestrate/SKILL.md": "1ddb2857b07dbbc37b39fa2457df72983dfd1fcc4f1b40c4dc10a38104a397f2",
+    ".claude/skills/geo-orchestrate/scripts/lib/constants.ts": "c3e05385587d0b0a791215f4fa92704cfac324bcc2ac8741841d9760f63c7eea",
+    ".claude/skills/geo-orchestrate/scripts/lib/entity_ops.ts": "8849c9c069d4adcd7a8157f606e7bc366706374edbd021d7d48e160f1e74e27f",
+    ".claude/skills/geo-orchestrate/scripts/lib/functions.ts": "1c92d97b379f6a75491e6205f7811173a2f0e3761245c9e977197c41ee977f77",
+    ".claude/skills/geo-orchestrate/SKILL.md": "06f2d764f42dd803a2f9c5972818f5f5f980e0cd3b5997e078f32042cae90f80",
     ".claude/skills/geo-press-review/evals/evals.json": "1b72e4f2b182e184334d8727b91d4294096cd8f841f3472039290f5c8e87c70c",
-    ".claude/skills/geo-press-review/SKILL.md": "17951ecd4115c3c44a7f8c69353d7f671b2256ac62f06176c91d32a2d47a5039",
+    ".claude/skills/geo-press-review/scripts/press-review-coverage-map.ts": "546cee820c0ca05f2abfdff21c06b5ee815e26b8520b34314683574544bd05c0",
+    ".claude/skills/geo-press-review/SKILL.md": "de383387af32383f098b306dbd915f11548d18a4f0c43606f763d92bfa4c5d2d",
     ".claude/skills/geo-publish/evals/evals.json": "767e971f07a11ab945d4b1a75c2f564b429f38dfcdb0a1cdec7cbacc88b7f5ce",
-    ".claude/skills/geo-publish/SKILL.md": "563a36cd56b3d5b795b4bc7c8154bc8265656eed40d7e207120488ff34407fd3",
-    ".claude/skills/geo-query/evals/evals.json": "7891da51e3fc637ce6ebe9ac07c111d09c997402dbb58a1ef098aa24ad797429",
-    ".claude/skills/geo-query/SKILL.md": "fe7f5088be7b85fa54e165f08728698a42416736d424a8581d8a8a1761aa5f56",
+    ".claude/skills/geo-publish/references/knowledge-graph-ontology.md": "3a8086cab7cc94401417856201904a3eaeafc6db60ee33a28a6236f4b0817fe1",
+    ".claude/skills/geo-publish/scripts/inject-publish-example.ts": "9406fccd60e7cf1ff795ce254f9949af59d274af6263e81de6b20721bc3e09ff",
+    ".claude/skills/geo-publish/scripts/lib/constants.ts": "c3e05385587d0b0a791215f4fa92704cfac324bcc2ac8741841d9760f63c7eea",
+    ".claude/skills/geo-publish/scripts/lib/functions.ts": "1c92d97b379f6a75491e6205f7811173a2f0e3761245c9e977197c41ee977f77",
+    ".claude/skills/geo-publish/scripts/lib/inject.ts": "b4db4d2cf9c89addb540d1422002b2aec125130e0e108840db8b27ea57b7a30d",
+    ".claude/skills/geo-publish/scripts/xlsx-to-csv.cjs": "0f434d7d5c1b336c61f04d7935bf5598a76e6f9459f09eafaa6092ef25a7f3df",
+    ".claude/skills/geo-publish/SKILL.md": "cdd181a006dd7ce3762ae160ace65312a96dedb4281698b41f24bdc26788dba3",
+    ".claude/skills/geo-query/evals/evals.json": "3c51a29787e0c4d5cff74afc88af00c6cc3381e7eac45341af091e440c5a02c6",
+    ".claude/skills/geo-query/references/knowledge-graph-ontology.md": "3a8086cab7cc94401417856201904a3eaeafc6db60ee33a28a6236f4b0817fe1",
+    ".claude/skills/geo-query/scripts/gql-cli.mjs": "01fdbabfb37f0c9f128b6874ae771ecb304d2002f0285af5169c64aa84b3fb3c",
+    ".claude/skills/geo-query/scripts/gql.mjs": "a7f6ad7c4f51422541dc0ce405bd0464abe97271f0eb9e42499f41fff0463f66",
+    ".claude/skills/geo-query/scripts/lib/constants.ts": "c3e05385587d0b0a791215f4fa92704cfac324bcc2ac8741841d9760f63c7eea",
+    ".claude/skills/geo-query/SKILL.md": "6184936279ace852a8f866ac7133acd55c6f1d1e4a8f441fc7e004e4028635b4",
     ".claude/skills/geo-submission-review/assets/editor-run-report.md": "802df5b28adedb60b5ec08dd5af253c4ed7fedf195febefde2d28755d62b541f",
     ".claude/skills/geo-submission-review/evals/evals.json": "6947d431fac134946514413dc7152e5784c51d56f9c75f2ab62799f9d569f361",
     ".claude/skills/geo-submission-review/evals/results-2026-10-03.md": "edd1b7540fbbb7b72589230112b25eae5557d43aa61258ceff44258e230900ff",
@@ -148,24 +171,24 @@
     ".claude/skills/geo-submission-review/references/news-review.md": "15fd4325643a5fc21bce77311642e89cdd071f57368468d529a37a6f67c193c7",
     ".claude/skills/geo-submission-review/references/notion-review.md": "15d7160d9c70729fa401951644d3cc16cf14c776b4ef2237f0bd8272f6059f2c",
     ".claude/skills/geo-submission-review/references/review-history.md": "933d26fe9c2670ec1026636a94fd8d61a90ac0203e2440a056b8965d1c9a2cb9",
-    ".claude/skills/geo-submission-review/references/routine.md": "0491aeb9063160a06f1ab7e01571e32b09f5383d9537e45507605febd13452c7",
+    ".claude/skills/geo-submission-review/references/routine.md": "2df1f0c967ce23e77bd242f2a167e2b5402c043babe4616b144c7c9e412a205c",
     ".claude/skills/geo-submission-review/scripts/editor-run-report.mjs": "5a52957819267f152a3afb81fb6288428bdbb0a3084ab96fb1d9d9f6ef1bf4c4",
     ".claude/skills/geo-submission-review/scripts/notion-report.mjs": "f56a59c91ee84386a86214bd332df25ccec04753dab8f7745a9870575760d44a",
-    ".claude/skills/geo-submission-review/scripts/report-ops.mjs": "6f1380b957bb14a2c6fd4423de423c5d694837a3e8e258426d6bd1929e51327e",
+    ".claude/skills/geo-submission-review/scripts/report-ops.mjs": "08092f2f21e92fa57eb2f0f49db73d1d89e0a4b36767099824bbfee3745382c5",
     ".claude/skills/geo-submission-review/scripts/review-client.mjs": "a5de04beff22b0b3a169cddd729682975ce8a4ae59b8764d508c951f82469576",
     ".claude/skills/geo-submission-review/scripts/review-core.mjs": "bd12f2929953b788e0b8697f9728957409c578c8ce324a1dd0c7e40d18b0a2e7",
     ".claude/skills/geo-submission-review/scripts/review-history.mjs": "ec4aade42e70696a05cbca22ec92bfda387aeae3c3eda8a2d341ba441bb4f23f",
     ".claude/skills/geo-submission-review/scripts/review-integrity.mjs": "d2e2ae0c8905651f23a9bafe82c4fc569618a447fbf1b4f84c7aec62baddc810",
-    ".claude/skills/geo-submission-review/scripts/review-stage0.mjs": "432ceefb56e9ea23f58754df7cf0a2f3695a7cf5c62c99e3c066cba5056944ce",
+    ".claude/skills/geo-submission-review/scripts/review-stage0.mjs": "e9eb2c639d0f2a35c15d0ee7a48302853b17fa24fcc11fa64bef177cbc82dad9",
     ".claude/skills/geo-submission-review/scripts/review.mjs": "e2870d315a4daab41b2391385cb081b5921de6614657569426c556a5edc965ff",
-    ".claude/skills/geo-submission-review/SKILL.md": "c9d9e66157afe1bc7afe41ca50cc2a237c5faae5d620985d79e958cbad1d7447",
+    ".claude/skills/geo-submission-review/SKILL.md": "c6bbf05c8835ed27a99b45dffdd043dc9d2a9c3ab87341d15cdafefb504e6367",
     ".claude/skills/geo-submission-review/tests/completion.test.mjs": "781631dbcf3b43921fe1bbd0bd104c4a152e659e45d93f96d3fbeb3a5b7e7886",
     ".claude/skills/geo-submission-review/tests/editor-run-report.test.mjs": "0c99c33d34c0109e3b700e95b7cc3b9cee8cc336eac3901fd5184a9e193cf114",
     ".claude/skills/geo-submission-review/tests/editor-summary.test.mjs": "445f4fd567bef6562cb836c52e8c32caf2bf5bd5f3bde4854385dafda70e7f96",
     ".claude/skills/geo-submission-review/tests/integrity.test.mjs": "862690f72e74e684498ea65c54dcb2bad1b847e10c4ec063b7265cfceb94a296",
-    ".claude/skills/geo-submission-review/tests/mock-stage0.mjs": "5aa903bf6e4b7859daf4556b808d6c99ac756ea9c4eec0776c54380978b3f048",
+    ".claude/skills/geo-submission-review/tests/mock-stage0.mjs": "dbd91d6ce5f5671922a39d65249a274ba277c75b00a084cadd43d2f9d51fbc16",
     ".claude/skills/geo-submission-review/tests/recipient-classification.test.mjs": "63046e36a6e648c142321f1c5caf48afafbbee36f0623c0ca6c1699f8b096a8d",
-    ".claude/skills/geo-submission-review/tests/report-introduction.test.mjs": "830120ccad0228949d488b1153ddd877ced36f9da657a5d6703d7443a50bcc57",
+    ".claude/skills/geo-submission-review/tests/report-introduction.test.mjs": "44b6319f859cdde57d79325639d5362afac026ad074864b0389c56594d355b43",
     ".claude/skills/geo-submission-review/tests/report-ops.test.mjs": "0f7ed14b9bb930de4eac22176d08a40b6c7be18df0be2057fe4d5e5805a373cb",
     ".claude/skills/geo-submission-review/tests/review-history.test.mjs": "fa19081843cd7d62147e020c461adfda21de4a82dc801935c5e5d64b3bb9d05a",
     ".claude/skills/geo-submission-review/tests/workflow.test.mjs": "aec04e901afcdc9d71dffad95880ac97d32378aa19f78afab4987cc2c9d82503",
@@ -177,8 +200,9 @@
     ".claude/skills/notion-operations/evals/evals.json": "3a2239fd5c5d79431bfca9521b87113c6826185796434ae6f7d2b35bc7dc0b91",
     ".claude/skills/notion-operations/references/api-versions-and-limits.md": "36ec6d70eab12dc428d1a60337d949025ce8f251c554e95a839c6344b83b03d6",
     ".claude/skills/notion-operations/references/notion-traps.md": "819d3fb67c7899694ee25aa00dcb6c585a7716f6808784ebea6255d927f8b617",
-    ".claude/skills/notion-operations/references/toolkit-scripts.md": "f6ffa1fed3754d85b547f15ea7811b693090db9b876a089b908afc6d5b4dd4c6",
-    ".claude/skills/notion-operations/SKILL.md": "905d9a1c320b1d669c8b896492620d229297bb7e045f21a88de84f78757dee25",
+    ".claude/skills/notion-operations/references/toolkit-scripts.md": "7a2e6c4034a494adb8c6a78dc55d6901f44f67810bf19f6c64857233c95b3835",
+    ".claude/skills/notion-operations/scripts/notion-read.mjs": "2312f5289c57c53b37128e6351eedff194658b4a209fa7019cdcd3f128aba3b5",
+    ".claude/skills/notion-operations/SKILL.md": "1d79f28415d70ddb4cbf04cbcdf67e3ae8cd8b5125ee1b01f90a5f97ce0d42ce",
     ".claude/skills/ontology-advisor/.gitignore": "e9b9cafae64b14ba2022d557903db0fc9869a88a34edd7ebef99d77a666bd43d",
     ".claude/skills/ontology-advisor/evals/evals.json": "f61fc76a52d9878afc0c0240a62463e3492c0094518f481bafe2204422d3426c",
     ".claude/skills/ontology-advisor/README.md": "32f1bde48e0bdcc00e7dc37546117adae7aa6deedda84374940d6f1fdb182fd1",
